@@ -1,0 +1,129 @@
+# ========================
+# Python
+# ========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Testing
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Mypy / type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+
+# Distribution
+*.tar.gz
+*.whl
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Database
+*.db
+*.sqlite3
+
+# Alembic
+alembic/versions/*.pyc
+
+# ========================
+# Node.js / Frontend
+# ========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# Build output
+dist/
+.next/
+out/
+build/
+
+# Nuxt
+.nuxt/
+.output/
+
+# Misc
+.DS_Store
+Thumbs.db
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# ========================
+# Docker
+# ========================
+docker-compose.override.yml
+
+# ========================
+# Terraform / IaC
+# ========================
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+
+# ========================
+# Recordings / Media
+# ========================
+recordings/
+uploads/
+*.mp3
+*.wav
+*.ogg
+
+# ========================
+# Secrets
+# ========================
+*.pem
+*.key
+*.crt
+*.p12

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: callrevive-config
+  namespace: callrevive
+data:
+  APP_ENV: "production"
+  APP_DEBUG: "false"
+  TWILIO_PHONE_NUMBER: "+1234567890"
+  TWILIO_WHATSAPP_NUMBER: "whatsapp:+14155238886"
+  BACKBLAZE_BUCKET_NAME: "callrevive-recordings"
+  BACKBLAZE_BUCKET_ID: "your-bucket-id"
+  BACKBLAZE_ENDPOINT_URL: "https://s3.us-west-002.backblazeb2.com"
+  JWT_ACCESS_TOKEN_EXPIRE_MINUTES: "30"
+  JWT_REFRESH_TOKEN_EXPIRE_DAYS: "7"
+  FRONTEND_URL: "http://callrevive.local"
+  BACKEND_URL: "http://api.callrevive.local"
+  PROMETHEUS_ENABLED: "true"

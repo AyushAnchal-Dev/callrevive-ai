@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  api:
+    volumes:
+      - ../../backend:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    environment:
+      - APP_ENV=development
+      - APP_DEBUG=true
+
+  worker:
+    volumes:
+      - ../../backend:/app
+    # Celery automatically reloads on code change if watchdog/eventlet is set up, or standard dev command
+    command: watchfiles "celery -A app.worker.celery_app worker --loglevel=info -Q calls,leads,notifications,whatsapp,analytics" app
+    environment:
+      - APP_ENV=development
+      - APP_DEBUG=true

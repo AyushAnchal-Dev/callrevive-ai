@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: callrevive
+  labels:
+    app.kubernetes.io/name: callrevive
+    app.kubernetes.io/part-of: callrevive-platform

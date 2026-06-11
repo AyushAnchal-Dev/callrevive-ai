@@ -1,0 +1,177 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: callrevive-backend
+  namespace: callrevive
+  labels:
+    app: callrevive-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: callrevive-backend
+  template:
+    metadata:
+      labels:
+        app: callrevive-backend
+    spec:
+      containers:
+      - name: backend
+        image: callrevive-backend:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        # Load from configmap
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: callrevive-config
+              key: APP_ENV
+        - name: APP_DEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: callrevive-config
+              key: APP_DEBUG
+        - name: TWILIO_PHONE_NUMBER
+          valueFrom:
+            configMapKeyRef:
+              name: callrevive-config
+              key: TWILIO_PHONE_NUMBER
+        - name: TWILIO_WHATSAPP_NUMBER
+          valueFrom:
+            configMapKeyRef:
+              name: callrevive-config
+              key: TWILIO_WHATSAPP_NUMBER
+        - name: BACKBLAZE_BUCKET_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: callrevive-config
+              key: BACKBLAZE_BUCKET_NAME
+        - name: BACKBLAZE_BUCKET_ID
+          valueFrom:
+            configMapKeyRef:
+              name: callrevive-config
+              key: BACKBLAZE_BUCKET_ID
+        - name: BACKBLAZE_ENDPOINT_URL
+          valueFrom:
+            configMapKeyRef:
+              name: callrevive-config
+              key: BACKBLAZE_ENDPOINT_URL
+        - name: JWT_ACCESS_TOKEN_EXPIRE_MINUTES
+          valueFrom:
+            configMapKeyRef:
+              name: callrevive-config
+              key: JWT_ACCESS_TOKEN_EXPIRE_MINUTES
+        - name: JWT_REFRESH_TOKEN_EXPIRE_DAYS
+          valueFrom:
+            configMapKeyRef:
+              name: callrevive-config
+              key: JWT_REFRESH_TOKEN_EXPIRE_DAYS
+        - name: FRONTEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: callrevive-config
+              key: FRONTEND_URL
+        - name: BACKEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: callrevive-config
+              key: BACKEND_URL
+        - name: PROMETHEUS_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: callrevive-config
+              key: PROMETHEUS_ENABLED
+        
+        # Load secrets
+        - name: APP_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: callrevive-secrets
+              key: app-secret-key
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: callrevive-secrets
+              key: database-url
+        - name: DATABASE_SYNC_URL
+          valueFrom:
+            secretKeyRef:
+              name: callrevive-secrets
+              key: database-sync-url
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: callrevive-secrets
+              key: redis-url
+        - name: CLOUDAMQP_URL
+          valueFrom:
+            secretKeyRef:
+              name: callrevive-secrets
+              key: cloudamqp-url
+        - name: GEMINI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: callrevive-secrets
+              key: gemini-api-key
+        - name: TWILIO_ACCOUNT_SID
+          valueFrom:
+            secretKeyRef:
+              name: callrevive-secrets
+              key: twilio-account-sid
+        - name: TWILIO_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: callrevive-secrets
+              key: twilio-auth-token
+        - name: BACKBLAZE_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: callrevive-secrets
+              key: backblaze-key-id
+        - name: BACKBLAZE_APPLICATION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: callrevive-secrets
+              key: backblaze-application-key
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: callrevive-secrets
+              key: jwt-secret
+        
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: callrevive-backend
+  namespace: callrevive
+spec:
+  ports:
+  - port: 8000
+    targetPort: 8000
+    name: http
+  selector:
+    app: callrevive-backend
+  type: ClusterIP
