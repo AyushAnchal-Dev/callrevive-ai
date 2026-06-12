@@ -4,14 +4,11 @@ from __future__ import annotations
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
-from slowapi import _rate_limit_exceeded_handler
-from slowapi.errors import RateLimitExceeded
 
 from app.core.config import get_settings
 from app.core.exceptions import AppException, app_exception_handler
-from app.core.middleware import RequestIDMiddleware, AuditLogMiddleware, limiter
+from app.core.middleware import register_middleware
 
 settings = get_settings()
 
@@ -34,20 +31,8 @@ app = FastAPI(
     redoc_url="/redoc" if settings.APP_DEBUG else None,
 )
 
-# --- Middleware ---
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.cors_origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-app.add_middleware(RequestIDMiddleware)
-app.add_middleware(AuditLogMiddleware)
-
-# --- Rate Limiting ---
-app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+# --- Middleware & Rate Limiting ---
+register_middleware(app)
 
 # --- Exception Handlers ---
 app.add_exception_handler(AppException, app_exception_handler)
