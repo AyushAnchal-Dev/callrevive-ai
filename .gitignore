@@ -127,3 +127,4 @@ uploads/
 *.key
 *.crt
 *.p12
+frontend/.node/
