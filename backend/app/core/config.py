@@ -114,8 +114,8 @@ class Settings(BaseSettings):
         """Allowed CORS origins."""
         origins = []
         if self.FRONTEND_URL:
-            # Support comma-separated URLs in FRONTEND_URL env var
-            origins.extend([org.strip() for org in self.FRONTEND_URL.split(",") if org.strip()])
+            # Support comma-separated URLs in FRONTEND_URL env var, stripping trailing slashes
+            origins.extend([org.strip().rstrip('/') for org in self.FRONTEND_URL.split(",") if org.strip()])
         if self.APP_DEBUG:
             origins.extend([
                 "http://localhost:3000",
