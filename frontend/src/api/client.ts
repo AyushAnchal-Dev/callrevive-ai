@@ -10,9 +10,24 @@ const apiClient = axios.create({
   timeout: 15000,
 });
 
-// Request interceptor - attach auth token
+// Request interceptor - attach auth token & append trailing slash to base endpoints
 apiClient.interceptors.request.use(
   (config) => {
+    // Append trailing slash to base endpoints to avoid CORS redirection issues
+    const baseEndpoints = [
+      "/calls",
+      "/leads",
+      "/customers",
+      "/appointments",
+      "/conversations",
+      "/notifications",
+      "/settings",
+      "/search",
+    ];
+    if (config.url && baseEndpoints.includes(config.url)) {
+      config.url = `${config.url}/`;
+    }
+
     const token = localStorage.getItem("accessToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
